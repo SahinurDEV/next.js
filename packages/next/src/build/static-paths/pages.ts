@@ -174,6 +174,17 @@ export async function buildPagesStaticPaths({
           )
         }
 
+        if (repeat && Array.isArray(paramValue)) {
+          const invalidIndex = paramValue.findIndex(
+            (item) => typeof item !== 'string'
+          )
+          if (invalidIndex !== -1) {
+            throw new Error(
+              `A required parameter (${validParamKey}) must be an array of strings, but item ${invalidIndex} is ${typeof paramValue[invalidIndex]} in getStaticPaths for ${page}`
+            )
+          }
+        }
+
         let replaced = `[${repeat ? '...' : ''}${validParamKey}]`
         if (optional) {
           replaced = `[${replaced}]`
